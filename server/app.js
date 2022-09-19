@@ -53,7 +53,7 @@ try {
         var name = req.query.name;
         var score = req.query.score;
     
-        const query1 = "SELECT * FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._rank<=" + limit + ";";
+        const query1 = "SELECT * FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._rank<=" + limit + " LIMIT 10;";
         const query2 = "SELECT _rank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._username = '"+ name +"' and ranked._score=" + score + " LIMIT 1;"
 
         let data = {};
