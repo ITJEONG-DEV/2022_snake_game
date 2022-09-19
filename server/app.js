@@ -10,11 +10,14 @@ const sqlConnection = createConnection();
 sqlConnection.connect();
 
 app.get('/', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     res.send('Hello World!' + req);
 });
 
 // /addrank?name={name}&score={score}&id={id}
 app.get('/addrank', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+
     var name = req.query.name;
     var score = req.query.score;
     var id = req.query.id;
@@ -30,11 +33,16 @@ app.get('/addrank', (req, res) => {
         // console.log(results);
         // console.log(fields);
 
-        return res.send("results: " + results + "\nfields: " + fields);
+        return res.send(JSON.stringify({
+            "results":results,
+            "fields":fields
+        }));
     });
 });
 
 app.get('/getrank', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+
     const query = "SELECT * FROM rankdata";
     sqlConnection.query(query, function(error, results, fields) {
         if(error) {
@@ -46,7 +54,10 @@ app.get('/getrank', (req, res) => {
         // console.log(results);
         // console.log(fields);
 
-        return res.send("results: " + results + "\nfields: " + fields);
+        return res.send(JSON.stringify({
+            "results":results,
+            "fields":fields
+        }));
     });
 });
 
