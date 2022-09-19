@@ -332,8 +332,16 @@
         draw();
     }
 
-    addRank('itjeong', 50);
-    getRank();
+    async function showRank(name, score) {
+        const result1 = await addRank(name, score);
+        const result2 = await getRank(name, score);
+
+        console.log(result1);
+        console.log(result2);
+    }
+
+    showRank("ttest", 73);
+
     // init();
     // draw();
     // timeoutId = setTimeout(loop, currentTerm);

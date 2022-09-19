@@ -1,27 +1,25 @@
 const server = "http://localhost:3308";
 
-export function addRank(name, score) {
+export async function addRank(name, score) {
     const url = server+'/addrank?name='+name+'&score='+score;
-    fetch(url, {
+    const config = {
         method: 'GET'
-    })
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-        });
+    };
+
+    return fetch(url, config)
+    .then((res) => {
+        return res.json();
+    });
 }
 
-export function getRank() {
-    const url = server+'/getrank';
-    fetch(url, {
+export async function getRank(name, score) {
+    const url = server+'/getrank?name='+name+'&score='+score;
+    const config = {
         method: 'GET'
-    })
-        .then(response => { 
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-        });
+    };
+
+    return fetch(url, config)
+    .then((res) => {
+        return res.json();
+    });
 }
