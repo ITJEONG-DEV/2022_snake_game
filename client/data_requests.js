@@ -1,7 +1,7 @@
 const server = "http://localhost:3308";
 
-export function addRank(name, score, id) {
-    const url = server+'/addrank?name='+name+'&score='+score+"&id="+id;
+export function addRank(name, score) {
+    const url = server+'/addrank?name='+name+'&score='+score;
     fetch(url, {
         method: 'GET'
     })

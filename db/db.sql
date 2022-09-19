@@ -2,15 +2,16 @@
 #CREATE DATABASE snakegame;
 USE snakegame;
 
+DROP TABLE rankdata;
+
 CREATE TABLE rankdata(
-	_id CHAR(10) NOT NULL,
 	_username VARCHAR(10) NOT NULL,
     _score INT NOT NULL,
     _time DATETIME NOT NULL,
-    PRIMARY KEY(_ID)
+    PRIMARY KEY(_username, _time)
 );
 
-INSERT INTO rankdata (_id, _username, _score, _time) VALUES('220919abcd', 'itjeong', 30, NOW());
+INSERT INTO rankdata (_username, _score, _time) VALUES('itjeong', 30, NOW());
 
 use snakegame;
 

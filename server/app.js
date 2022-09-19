@@ -20,9 +20,8 @@ app.get('/addrank', (req, res) => {
 
     var name = req.query.name;
     var score = req.query.score;
-    var id = req.query.id;
 
-    const query = "INSERT INTO rankdata(_id, _username, _score, _time)" + "VALUES('" + id + "', '" + name + "', " + score + ", NOW());";
+    const query = "INSERT INTO rankdata(_username, _score, _time)" + "VALUES('" + name + "', " + score + ", NOW());";
 
     sqlConnection.query(query, function(error, results, fields) {
         if(error) {
