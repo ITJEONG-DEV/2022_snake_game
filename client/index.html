@@ -12,7 +12,9 @@
     </body>
 </html>
 
-<script>
+<script type="module">
+    import {addRank, getRank} from './data_requests.js';
+
     const restartBtn = document.querySelector('#restart');
     const score = document.querySelector('#score');
 
@@ -330,9 +332,11 @@
         draw();
     }
 
-    init();
-    draw();
-    timeoutId = setTimeout(loop, currentTerm);
+    addRank('itjeong', 50, '220919ddbb');
+    getRank();
+    // init();
+    // draw();
+    // timeoutId = setTimeout(loop, currentTerm);
     // setInterval(loop, TERM);
 </script>
 
