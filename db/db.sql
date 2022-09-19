@@ -32,6 +32,7 @@ SELECT * FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC
 
 # 선택한 유저의 점수가 몇 등인지 가져옴
 SELECT * FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._username = 'itjeong' and ranked._score=60;
+SELECT _rank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._username = 'itjeong' and ranked._score=60;
 
 # 최대 등수
 SELECT MAX(ranked._rank) FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked;

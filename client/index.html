@@ -9,6 +9,10 @@
         <h1>Snake game  <button id="restart">restart</button> </h1>
         <p id="score"></p>
         <canvas></canvas>
+        <div id="ranking">
+            <h1 id="ranking_text">Ranking</h1>
+            <div id="ranking_content"></div>
+        </div>
     </body>
 </html>
 
@@ -17,8 +21,10 @@
 
     const restartBtn = document.querySelector('#restart');
     const score = document.querySelector('#score');
+    const ranking = document.querySelector("#ranking");
+    const ranking_content = document.querySelector("#ranking_content");
 
-    const canvas = document.querySelector('canvas')
+    const canvas = document.querySelector('canvas');
     const ctx = canvas.getContext('2d');
 
     const WIDTH = canvas.width = window.innerWidth;
@@ -272,6 +278,7 @@
     restartBtn.addEventListener('click', restart);
 
     function init() {
+        ranking.hidden = true;
         scoreNum = 0;
         totalScore = 0;
         renewText();
@@ -330,21 +337,103 @@
     function gameOver() {
         // clearInterval(loop);
         draw();
+
+        showRankingPopup();
     }
 
-    async function showRank(name, score) {
-        const result1 = await addRank(name, score);
-        const result2 = await getRank(name, score);
+    function showRankingPopup() {
+        ranking.hidden = false;
+        for(const child of ranking_content.children) {
+            ranking_content.removeChild(child);
+        }
 
-        console.log(result1);
-        console.log(result2);
+        var name = prompt('이름 입력', 'unknown')
+        if(name == "")
+            return;
+
+        showRank(name);
     }
 
-    showRank("ttest", 73);
+    let currentRankInfo;
 
-    // init();
-    // draw();
-    // timeoutId = setTimeout(loop, currentTerm);
+    async function showRank(name) {
+        const result1 = await addRank(name, totalScore);
+        const result2 = await getRank(name, totalScore);
+
+        const myRank = result2["myRank"][0]["_rank"];
+
+        const topRank = result2["topRank"];
+
+        const table = document.createElement("table");
+        const tableBody = document.createElement("tbody");
+
+        for(var j=-1; j<topRank.length+1; j++) {
+            var row = document.createElement("tr");
+
+            for(var i=0; i<3; i++) {
+                var cell = document.createElement("td");
+                let text = "";
+
+                if(j==-1) {
+                    cell.style.backgroundColor="#c4e7e7";
+                    switch(i) {
+                        case 0:
+                            text = "name";
+                            break;
+                        case 1:
+                            text = "score";
+                            break;
+                        case 2:
+                            text = "rank";
+                            break;
+                    }
+                } else if (j==topRank.length) {
+                    cell.style.backgroundColor="#d6e2ee";
+                    switch(i) {
+                        case 0:
+                            text = name;
+                            break;
+                        case 1:
+                            text = totalScore;
+                            break;
+                        case 2:
+                            text = myRank;
+                            break;
+                    }
+
+                } else {
+                    cell.style.backgroundColor="#fafdfd";
+                    switch(i) {
+                        case 0:
+                            text = topRank[j]["_username"];
+                            break;
+                        case 1:
+                            text = topRank[j]["_score"];
+                            break;
+                        case 2:
+                            text = topRank[j]["_rank"];
+                            break;
+                    }
+                }
+
+                var cellText = document.createTextNode(text);
+                cell.appendChild(cellText);
+                row.appendChild(cell);
+            }
+
+            tableBody.appendChild(row);
+        }
+        table.appendChild(tableBody);
+        ranking_content.appendChild(table);
+
+        table;
+    }
+
+    init();
+    draw();
+    timeoutId = setTimeout(loop, currentTerm);
+
+    // gameOver();
     // setInterval(loop, TERM);
 </script>
 
@@ -381,5 +470,38 @@
         top: 35px;
         right: 5px;
         color: #aaa;
+    }
+
+    table {
+        margin: auto;
+        margin-top: 25%;
+        border-collapse: collapse;
+    }
+
+    td {
+        width: 120px;
+        height: 40px;
+        border: 2px solid black;
+        font-size: 17px;
+        text-align: center;
+    }
+
+    #ranking {
+        position: absolute;
+        top:50%;
+        left:50%;
+        width: 500px;
+        height: 800px;
+        background-color:white;
+        margin-top: -400px;
+        margin-left: -250px;
+    }
+
+    #ranking_text {
+        color: black;
+        top:5%;
+        left: 50%;
+        width: 100px;
+        margin-left: -50px;
     }
 </style>
