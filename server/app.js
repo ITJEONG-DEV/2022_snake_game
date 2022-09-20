@@ -22,8 +22,8 @@ try {
         if(e) throw e;
     });
     
-    // /addrank?name={name}&score={score}&id={id}
-    app.get('/addrank', async (req, res) => {
+    // /snakegame/addrank?name={name}&score={score}&id={id}
+    app.get('/snakegame/addrank', async (req, res) => {
         res.header("Access-Control-Allow-Origin", "*");
 
         var name = req.query.name;
@@ -45,10 +45,11 @@ try {
         })
     });
     
-    app.get('/getrank', async (req, res) => {
+    // /snakegame/getrank?
+    app.get('/snakegame/getrank', async (req, res) => {
         res.header("Access-Control-Allow-Origin", "*");
 
-        const limit = 5;
+        const limit = 10;
     
         var name = req.query.name;
         var score = req.query.score;

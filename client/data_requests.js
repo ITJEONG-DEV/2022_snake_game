@@ -1,7 +1,7 @@
 const server = "http://localhost:3308";
 
 export async function addRank(name, score) {
-    const url = server+'/addrank?name='+name+'&score='+score;
+    const url = server+'/snakegame/addrank?name='+name+'&score='+score;
     const config = {
         method: 'GET'
     };
@@ -13,7 +13,7 @@ export async function addRank(name, score) {
 }
 
 export async function getRank(name, score) {
-    const url = server+'/getrank?name='+name+'&score='+score;
+    const url = server+'/snakegame/getrank?name='+name+'&score='+score;
     const config = {
         method: 'GET'
     };
