@@ -12,6 +12,7 @@
         <div id="ranking">
             <h1 id="ranking_text">Ranking</h1>
             <div id="ranking_content"></div>
+            <div id="ranking_result"></div>
         </div>
     </body>
 </html>
@@ -24,6 +25,7 @@
     const score = document.querySelector('#score');
     const ranking = document.querySelector("#ranking");
     const ranking_content = document.querySelector("#ranking_content");
+    const ranking_result = document.querySelector("#ranking_result");
 
     const canvas = document.querySelector('canvas');
     const ctx = canvas.getContext('2d');
@@ -377,26 +379,41 @@
 
     function showRankingPopup() {
         ranking.hidden = false;
+        ranking.style.width = WIDTH*0.6;
+        ranking.style.marginLeft = -WIDTH*0.3;
+
+        ranking.style.height = HEIGHT*0.8;
+        ranking.style.marginTop = -HEIGHT*0.4;
+
         for(const child of ranking_content.children) {
             ranking_content.removeChild(child);
         }
 
         var name = prompt('이름 입력', 'unknown')
-        if(name == "")
-            return;
-
-        showRank(name);
+        if(!name == "" && !name == "null") {
+            if(name.length>10) {
+                name = name.slice(0, 10);
+            }
+            showRank(name);
+        } else {
+            name = "";
+            showRank(name, false);
+        }
     }
 
     let currentRankInfo;
 
-    async function showRank(name) {
-        const result1 = await addRank(name, totalScore);
+    async function showRank(name, invalid = true) {
+        if(invalid) {
+            const result1 = await addRank(name, totalScore);
+        }
         const result2 = await getRank(name, totalScore);
 
-        const myRank = result2["myRank"][0]["_rank"];
+        const myRank = invalid? result2["myRank"][0]["_rank"] : -1;
 
         const topRank = result2["topRank"];
+
+        const maxRank = invalid? result2["maxRank"][0]["maxRank"] : -1; 
 
         const table = document.createElement("table");
         const tableBody = document.createElement("tbody");
@@ -425,16 +442,15 @@
                     cell.style.backgroundColor="#d6e2ee";
                     switch(i) {
                         case 0:
-                            text = name;
+                            text = invalid? name : "-";
                             break;
                         case 1:
-                            text = totalScore;
+                            text = invalid? totalScore : "-";
                             break;
                         case 2:
-                            text = myRank;
+                            text = invalid? myRank : "-";
                             break;
                     }
-
                 } else {
                     cell.style.backgroundColor="#fafdfd";
                     switch(i) {
@@ -460,7 +476,9 @@
         table.appendChild(tableBody);
         ranking_content.appendChild(table);
 
-        table;
+        var text = document.createTextNode(invalid? "전체 " + maxRank + "위 중 " + myRank + "위" : "");
+        ranking_result.appendChild(text);
+
     }
 
     window.onload = function() {
@@ -539,5 +557,10 @@
         left: 50%;
         width: 100px;
         margin-left: -50px;
+    }
+
+    #ranking_result {
+        margin-left: 30px;
+        margin-top: 20px;
     }
 </style>

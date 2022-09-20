@@ -24,6 +24,9 @@ SELECT * FROM rankdata ORDER BY _score DESC LIMIT 3;
 
 SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata;
 
+# 전체 등수
+SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata;
+
 # 상위 5개 점수만 가져옴
 SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata LIMIT 5;
 
@@ -35,7 +38,7 @@ SELECT * FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC
 SELECT _rank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._username = 'itjeong' and ranked._score=60;
 
 # 최대 등수
-SELECT MAX(ranked._rank) FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked;
+SELECT MAX(ranked._rank) maxRank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked;
 
 # 전체 인원
 SELECT COUNT(*) _count FROM rankdata;

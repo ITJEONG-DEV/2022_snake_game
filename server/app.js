@@ -54,7 +54,6 @@ try {
         var score = req.query.score;
     
         const query1 = "SELECT * FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._rank<=" + limit + " LIMIT 10;";
-        const query2 = "SELECT _rank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._username = '"+ name +"' and ranked._score=" + score + " LIMIT 1;"
 
         let data = {};
 
@@ -63,18 +62,36 @@ try {
             data["topRank"] = result;
         });
 
-        const myRank = Execute(query2)
-        .then((result) => {
-            data["myRank"] = result;
-        });
+        if(name == undefined) {
+            topRank.then(() => {
+                return res.send(data);
+            })
+            .catch((e) => {
+                console.error(e);
+                return;
+            })
+        } else {
+            const query2 = "SELECT _rank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked WHERE ranked._username = '"+ name +"' and ranked._score=" + score + " LIMIT 1;"
+            const query3 = "SELECT MAX(ranked._rank) maxRank FROM (SELECT _username, _score, DENSE_RANK() OVER (ORDER BY _score DESC) _rank FROM rankdata) ranked;";
 
-        Promise.all([topRank, myRank])
-        .then(() => {
-            return res.send(data);
-        })
-        .catch((e) => {
-            console.error(e);
-        })
+            const myRank = Execute(query2)
+            .then((result) => {
+                data["myRank"] = result;
+            });
+
+            const maxRank = Execute(query3)
+            .then((result) => {
+                data["maxRank"] = result;
+            })
+
+            Promise.all([topRank, myRank, maxRank])
+            .then(() => {
+                return res.send(data);
+            })
+            .catch((e) => {
+                console.error(e);
+            })
+        }
     });
     
     app.listen(SERVER_PORT, () => {
