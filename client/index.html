@@ -390,7 +390,8 @@
         }
 
         var name = prompt('이름 입력', 'unknown')
-        if(!name == "" && !name == "null") {
+        console.log("name: " + name);
+        if(name != null && name != "") {
             if(name.length>10) {
                 name = name.slice(0, 10);
             }
