@@ -29,3 +29,8 @@
 - 게임 플레이가 끝날 때마다 db를 추가
 - 상위 5등 이내 && 10인 이하의 순위를 가져와서 보여 줌
 - 본인의 점수와 등수를 보여 줌
+
+<br>
+
+#### 3 출처 표기
+- bgm 출처: [CLOUDY DAY](https://www.youtube.com/channel/UCKd4Bp5ngWpPrGjTrROBFoQ)에서 무료 제공하는 [레트로 게임브금](https://hypeddit.com/track/nt42fj) 사용함

@@ -5,7 +5,7 @@
         <title>Snake game</title>
     </head>
     <body>
-        
+        <audio id="bgm" src="./retro_bgm_cloudy_day.mp3" allow="autoplay;"></audio>
         <h1>Snake game  <button id="restart">restart</button> </h1>
         <p id="score"></p>
         <canvas></canvas>
@@ -19,6 +19,7 @@
 <script type="module">
     import {addRank, getRank} from './data_requests.js';
 
+    const audio = document.querySelector('#bgm');
     const restartBtn = document.querySelector('#restart');
     const score = document.querySelector('#score');
     const ranking = document.querySelector("#ranking");
@@ -30,8 +31,9 @@
     const WIDTH = canvas.width = window.innerWidth;
     const HEIGHT = canvas.height = window.innerHeight;
 
-    const TERM = 500;
-    const GAMMA = 0.97;
+    const MUSIC_RATE = 1.0;
+    const TERM = 350;
+    const GAMMA = 0.98;
     const UNIT = 30;
 
     const UNIT_WIDTH = Math.floor(WIDTH/UNIT/2)-1;
@@ -41,6 +43,7 @@
     let scoreNum = 0;
     let totalScore = 0;
     let currentTerm = TERM;
+    let currentRate = MUSIC_RATE;
     let timeoutId;
 
     // vector2(x, y) object
@@ -234,12 +237,7 @@
             var newPos = current.add(this.direction);
 
             if(newPos.compare(item)) {
-                this.addLength();
-
-                item.moveItem();
-                currentTerm = Math.floor(currentTerm*GAMMA);
-                scoreNum++;
-                renewText();
+                getScore();
             }
 
             if(this.checkHeadInValidArea(newPos) || this.checkHeadCollideWithBody()) {
@@ -284,6 +282,18 @@
         renewText();
 
         currentTerm = TERM;
+        currentRate = MUSIC_RATE;
+
+        var promise = audio.play();
+        if(promise != undefined) {
+            promise.then(_ => {
+                audio.play();
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+
+        audio.loop = true;
 
         item.moveItem();
     }
@@ -334,11 +344,35 @@
         timeoutId = setTimeout(loop, currentTerm);
     }
 
+    function getScore() {
+        // 뱀 길이 + 1
+        snake.addLength();
+
+        // 새로운 위치에 아이템 재생성
+        item.moveItem();
+
+        // 뱀 이동속도 증가
+        currentTerm = Math.floor(currentTerm*GAMMA*GAMMA);
+
+        // 점수 추가 및 갱신
+        scoreNum++;
+        renewText();
+        
+        // 음악 재생 속도
+        currentRate /= (4+GAMMA)/5;
+        audio.playbackRate = currentRate;
+
+        console.log("term: " + currentTerm + ", rate: " + audio.playbackRate)
+    }
+
     function gameOver() {
         // clearInterval(loop);
         draw();
 
         showRankingPopup();
+
+        audio.pause();
+        audio.currentTime = 0;
     }
 
     function showRankingPopup() {
@@ -429,9 +463,11 @@
         table;
     }
 
-    init();
-    draw();
-    timeoutId = setTimeout(loop, currentTerm);
+    window.onload = function() {
+        init();
+        draw();
+        timeoutId = setTimeout(loop, currentTerm);
+    }
 
     // gameOver();
     // setInterval(loop, TERM);
