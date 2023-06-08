@@ -1,5 +1,19 @@
 ### SNAKE GAME
 
+- 뱀 게임 개발
+- 랭킹 서버 구현
+- DB 구축
+
+<br>
+
+## 기술 스택
+
+| js | MySql |
+| :--------: | :--------: |
+|   <img src="https://raw.githubusercontent.com/ITJEONG-DEV/README/main/.images/js.png" width="200" height="180"/>   |   <img src="https://raw.githubusercontent.com/ITJEONG-DEV/README/cd763909be113b37c44ab5490a4e9007e2c00920/.images/mysql.svg" width="200" height="200"/>    |
+
+<br>
+
 #### 1 게임 설명
 - [뱀 게임](https://namu.wiki/w/%EB%B1%80%20%EA%B2%8C%EC%9E%84)을 구현함
 
@@ -34,3 +48,9 @@
 
 #### 3 출처 표기
 - bgm 출처: [CLOUDY DAY](https://www.youtube.com/channel/UCKd4Bp5ngWpPrGjTrROBFoQ)에서 무료 제공하는 [레트로 게임브금](https://hypeddit.com/track/nt42fj) 사용함
+
+<br>
+
+## 라이센스
+
+MIT &copy; [ITJEONG](mailto:derbana1027@gmail.com)
